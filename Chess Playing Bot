@@ -1,0 +1,71 @@
+import chess
+import chess.engine
+
+# Create a new chess board
+board = chess.Board()
+
+# Print the initial board state
+print(board)
+
+import chess.engine
+
+# Set up the Stockfish engine
+engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
+
+# Play a move using Stockfish
+result = engine.play(board, chess.engine.Limit(time=2.0))
+board.push(result.move)
+
+# Print the board after Stockfish's move
+print(board)
+
+# Close the engine
+engine.quit()
+
+def get_best_move(board, engine):
+    result = engine.play(board, chess.engine.Limit(time=2.0))
+    return result.move
+
+# Example of making moves
+while not board.is_game_over():
+    move = get_best_move(board, engine)
+    board.push(move)
+    print(board)
+
+import pygame
+import chess
+import chess.engine
+
+# Initialize Pygame
+pygame.init()
+
+# Set up display
+size = 600
+screen = pygame.display.set_mode((size, size))
+pygame.display.set_caption("Chess Bot")
+
+# Load images and initialize board
+board = chess.Board()
+engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
+
+# Function to draw the board
+def draw_board():
+    colors = [pygame.Color("white"), pygame.Color("gray")]
+    for r in range(8):
+        for c in range(8):
+            color = colors[(r+c) % 2]
+            pygame.draw.rect(screen, color, pygame.Rect(c*75, r*75, 75, 75))
+
+# Main game loop
+running = True
+while running:
+    draw_board()
+    pygame.display.flip()
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+pygame.quit()
+engine.quit()
+
